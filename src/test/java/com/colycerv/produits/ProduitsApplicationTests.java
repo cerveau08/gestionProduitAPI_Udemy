@@ -32,13 +32,13 @@ class ProduitsApplicationTests {
 	public void testUpdateProduit() {
 		Produit p = produitRepository.findById(2L).get();
 		p.setPrixProduit(1000.0);
-		p.setNomProduit("ThinkPad");
+		p.setNomProduit("ThinkPads");
 		produitRepository.save(p);
 	}
 	
 	@Test
 	public void testDeleteProduit() {
-		produitRepository.deleteById(3L);;
+		produitRepository.deleteById(3L);
 	}
 	 
 	@Test
