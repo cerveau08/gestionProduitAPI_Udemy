@@ -6,6 +6,9 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -24,5 +27,6 @@ public class Categorie {
   private String descriptionCat;
 
   @OneToMany(mappedBy = "categorie")
+  @JsonIgnore
   private List<Produit> produits;
 }
