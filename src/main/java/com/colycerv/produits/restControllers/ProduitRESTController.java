@@ -1,5 +1,6 @@
 package com.colycerv.produits.restControllers;
 
+import com.colycerv.produits.dto.ProduitDTO;
 import com.colycerv.produits.entities.Produit;
 import com.colycerv.produits.service.ProduitService;
 import java.util.List;
@@ -20,23 +21,23 @@ public class ProduitRESTController {
   ProduitService produitService;
 
   @RequestMapping(method = RequestMethod.GET)
-  public List<Produit> getAllProduits() {
+  public List<ProduitDTO> getAllProduits() {
     return produitService.getAllProduits();
   }
 
   @RequestMapping(value = "/{id}", method = RequestMethod.GET)
-  public Produit getProduitById(@PathVariable("id") Long id) {
+  public ProduitDTO getProduitById(@PathVariable("id") Long id) {
     return produitService.getProduit(id);
   }
 
   @RequestMapping(method = RequestMethod.POST)
-  public Produit createProduit(@RequestBody Produit produit) {
-    return produitService.saveProduit(produit);
+  public ProduitDTO createProduit(@RequestBody ProduitDTO p) {
+    return produitService.saveProduit(p);
   }
 
   @RequestMapping(method = RequestMethod.PUT)
-  public Produit updateProduit(@RequestBody Produit produit) {
-    return produitService.updateProduit(produit);
+  public ProduitDTO updateProduit(@RequestBody ProduitDTO p) {
+    return produitService.updateProduit(p);
   }
 
   @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)

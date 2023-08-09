@@ -1,10 +1,15 @@
 package com.colycerv.produits.service;
 
+import com.colycerv.produits.dto.ProduitDTO;
 import com.colycerv.produits.entities.Categorie;
 // import com.colycerv.produits.entities.Categorie;
 import com.colycerv.produits.entities.Produit;
 import com.colycerv.produits.repos.ProduitRepository;
 import java.util.List;
+import java.util.stream.Collectors;
+
+import org.modelmapper.ModelMapper;
+import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,15 +18,18 @@ public class ProduitServiceImpl implements ProduitService {
 
   @Autowired
   ProduitRepository produitRepository;
+  
+  @Autowired
+  ModelMapper modelMapper;
 
   @Override
-  public Produit saveProduit(Produit p) {
-    return produitRepository.save(p);
+  public ProduitDTO saveProduit(ProduitDTO p) {
+    return convertEntityToDto(produitRepository.save(convertDtoToEntity(p)));
   }
 
   @Override
-  public Produit updateProduit(Produit p) {
-    return produitRepository.save(p);
+  public ProduitDTO updateProduit(ProduitDTO p) {
+    return convertEntityToDto(produitRepository.save(convertDtoToEntity(p)));
   }
 
   @Override
@@ -35,13 +43,22 @@ public class ProduitServiceImpl implements ProduitService {
   }
 
   @Override
-  public Produit getProduit(Long id) {
-    return produitRepository.findById(id).get();
+  public ProduitDTO getProduit(Long id) {
+    return convertEntityToDto(produitRepository.findById(id).get());
   }
 
   @Override
-  public List<Produit> getAllProduits() {
-    return produitRepository.findAll();
+  public List<ProduitDTO> getAllProduits() {
+    return produitRepository
+      .findAll()
+      .stream()
+      .map(this::convertEntityToDto)
+      .collect(Collectors.toList());
+    /*List<Produit> prods = produitRepository.findAll();
+		List<ProduitDTO> listprodDto = new ArrayList<>(prods.size());
+		for (Produit p : prods)
+			listprodDto.add(convertEntityToDto(p));
+		return listprodDto;*/
   }
 
   @Override
@@ -102,5 +119,49 @@ public class ProduitServiceImpl implements ProduitService {
   @Override
   public List<Produit> findByOrderByCategorieNomCatDesc() {
     return produitRepository.findByOrderByCategorieNomCatDesc();
+  }
+
+  @Override
+  public ProduitDTO convertEntityToDto(Produit p) {
+    
+		modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.LOOSE);
+		ProduitDTO produitDTO =  modelMapper.map(p, ProduitDTO.class);
+		return produitDTO;
+
+    /*ProduitDTO produitDTO = new ProduitDTO();
+		
+		produitDTO.setIdProduit(p.getIdProduit());
+		produitDTO.setNomProduit(p.getNomProduit());
+		produitDTO.setPrixProduit(p.getPrixProduit());
+		produitDTO.setDateCreation(p.getDateCreation());
+		produitDTO.setCategorie(p.getCategorie());
+		
+		return produitDTO;*/
+
+    // return ProduitDTO
+    //   .builder()
+    //   .idProduit(p.getIdProduit())
+    //   .nomProduit(p.getNomProduit())
+    //   .prixProduit(p.getPrixProduit())
+    //   .dateCreation(p.getDateCreation())
+    //   // .nomCat(p.getCategorie().getNomCat())
+    //   .categorie(p.getCategorie())
+    //   .build();
+  }
+
+  @Override
+  public Produit convertDtoToEntity(ProduitDTO produitDto) {
+
+		Produit produit = new Produit();
+		produit = modelMapper.map(produitDto, Produit.class);
+		return produit;
+
+    // Produit produit = new Produit();
+    // produit.setIdProduit(produitDto.getIdProduit());
+    // produit.setNomProduit(produitDto.getNomProduit());
+    // produit.setPrixProduit(produitDto.getPrixProduit());
+    // produit.setDateCreation(produitDto.getDateCreation());
+    // produit.setCategorie(produitDto.getCategorie());
+    // return produit;
   }
 }

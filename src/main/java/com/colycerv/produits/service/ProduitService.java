@@ -1,17 +1,18 @@
 package com.colycerv.produits.service;
 
+import com.colycerv.produits.dto.ProduitDTO;
 import com.colycerv.produits.entities.Categorie;
 // import com.colycerv.produits.entities.Categorie;
 import com.colycerv.produits.entities.Produit;
 import java.util.List;
 
 public interface ProduitService {
-  Produit saveProduit(Produit p);
-  Produit updateProduit(Produit p);
+  ProduitDTO saveProduit(ProduitDTO p);
+  ProduitDTO updateProduit(ProduitDTO p);
   void deleteProduit(Produit p);
   void deleteProduitById(Long id);
-  Produit getProduit(Long id);
-  List<Produit> getAllProduits();
+  ProduitDTO getProduit(Long id);
+  List<ProduitDTO> getAllProduits();
 
   List<Produit> findByNomProduit(String nom);
   List<Produit> findByNomProduitContains(String nom);
@@ -25,4 +26,7 @@ public interface ProduitService {
   List<Produit> findByOrderByNomProduitAsc();
   List<Produit> findByOrderByCategorieNomCatDesc();
   List<Produit> trierProduitsNomsPrix();
+
+  ProduitDTO convertEntityToDto(Produit p);
+  Produit convertDtoToEntity(ProduitDTO produitDto);
 }
